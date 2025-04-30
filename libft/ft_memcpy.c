@@ -1,15 +1,14 @@
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-//CABECERA
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdiestre <mdiestre@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/30 12:57:02 by mdiestre          #+#    #+#             */
+/*   Updated: 2025/04/30 12:57:11 by mdiestre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include"libft.h"
 

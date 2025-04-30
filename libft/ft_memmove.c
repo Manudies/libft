@@ -1,15 +1,14 @@
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-//Cabecera
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdiestre <mdiestre@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/30 12:57:35 by mdiestre          #+#    #+#             */
+/*   Updated: 2025/04/30 12:57:45 by mdiestre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include"libft.h"
 
