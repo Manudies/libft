@@ -9,9 +9,83 @@ void ft_ok(int condition, const char *test_name)
 		printf("\033[0;31m[KO]\033[0m %s\n", test_name);
 }
 
+void test_isalpha(void)
+{
+	printf("\033[38;5;214m[TEST FT_ISALPHA]\033[0m\n");
+	ft_ok(ft_isalpha('A') == 1, "ft_isalpha('A')");
+	ft_ok(ft_isalpha('z') == 1, "ft_isalpha('z')");
+	ft_ok(ft_isalpha('1') == 0, "ft_isalpha('1')");
+	ft_ok(ft_isalpha('*') == 0, "ft_isalpha('*')");
+	ft_ok(ft_isalpha('a') == 1, "ft_isalpha('a')");
+	ft_ok(ft_isalpha('Z') == 1, "ft_isalpha('Z')");
+	ft_ok(ft_isalpha('5') == 0, "ft_isalpha('5')");
+	ft_ok(ft_isalpha('^') == 0, "ft_isalpha('^')");
+	printf("\n");
+}
+
+void test_isdigit(void)
+{
+	printf("\033[38;5;214m[TEST FT_ISDIGIT]\033[0m\n");
+	ft_ok(ft_isdigit('9') == 1, "ft_isdigit('9')");
+	ft_ok(ft_isdigit('5') == 1, "ft_isdigit('5')");
+	ft_ok(ft_isdigit('0') == 1, "ft_isdigit('1')");
+	ft_ok(ft_isdigit('a') == 0, "ft_isdigit('a')");
+	ft_ok(ft_isdigit('A') == 0, "ft_isdigit('A')");
+	ft_ok(ft_isdigit('Z') == 0, "ft_isdigit('Z')");
+	ft_ok(ft_isdigit('z') == 0, "ft_isdigit('z')");
+	ft_ok(ft_isdigit(';') == 0, "ft_isdigit(';')");
+	printf("\n");
+}
+
+void test_isalnum(void)
+{
+	printf("\033[38;5;214m[TEST FT_ISALNUM]\033[0m\n");
+	ft_ok(ft_isalnum('9') == 1, "ft_isalnum('9')");
+	ft_ok(ft_isalnum('5') == 1, "ft_isalnum('5')");
+	ft_ok(ft_isalnum('0') == 1, "ft_isalnum('0')");
+	ft_ok(ft_isalnum('a') == 1, "ft_isalnum('a')");
+	ft_ok(ft_isalnum('-') == 0, "ft_isalnum('-')");
+	ft_ok(ft_isalnum('Z') == 1, "ft_isalnum('Z')");
+	ft_ok(ft_isalnum('z') == 1, "ft_isalnum('z')");
+	ft_ok(ft_isalnum(';') == 0, "ft_isalnum(';')");
+	printf("\n");
+}
+
+void test_isascii(void)
+{
+	printf("\033[38;5;214m[TEST FT_ISASCII]\033[0m\n");
+	ft_ok(ft_isascii('A') == 1, "ft_isascii('A')");
+	ft_ok(ft_isascii(127) == 1, "ft_isascii(127)");
+	ft_ok(ft_isascii(0) == 1, "ft_isascii(0)");
+	ft_ok(ft_isascii(128) == 0, "ft_isascii(128)");
+	ft_ok(ft_isascii(-1) == 0, "ft_isascii(-1)");
+	printf("\n");
+}
+
+void test_isprint(void)
+{
+	printf("\033[38;5;214m[TEST FT_ISPRINT]\033[0m\n");
+	ft_ok(ft_isprint(' ') == 1, "ft_isprint(' ')");
+	ft_ok(ft_isprint('A') == 1, "ft_isprint('A')");
+	ft_ok(ft_isprint('~') == 1, "ft_isprint('~')");
+	ft_ok(ft_isprint(31) == 0, "ft_isprint(31)");
+	ft_ok(ft_isprint(127) == 0, "ft_isprint(127)");
+	printf("\n");
+}
+
+void test_strlen(void)
+{
+	printf("\033[38;5;214m[TEST FT_STRLEN]\033[0m\n");
+	ft_ok(ft_strlen("ChatGPT") == 7, "ft_strlen(\"ChatGPT\")");
+	ft_ok(ft_strlen("hola") == 4, "ft_strlen(\"hola\")");
+	ft_ok(ft_strlen("") == 0, "ft_strlen(\"\")");
+	ft_ok(ft_strlen("42Urduliz") == 9, "ft_strlen(\"42Urduliz\")");
+	printf("\n");
+}
 
 void test_memset(void)
 {
+	printf("\033[38;5;214m[TEST FT_MEMSET]\033[0m\n");
     char buffer[6] = "aaaaa"; // Crea un buffer inicializado a "aaaaa"
 
     // Aplicamos ft_memset para cambiar los 3 primeros caracteres a 'X'
@@ -59,10 +133,13 @@ void test_memset(void)
 	ft_ok(buffer[2] == 'A', "ft_memset len=0 buffer[2] == 'A'");
 	ft_ok(buffer[3] == 'A', "ft_memset len=0 buffer[3] == 'A'");
 	ft_ok(buffer[4] == 'A', "ft_memset len=0 buffer[4] == 'A'");
+
+	printf("\n");
 }
 
 void test_bzero(void)
 {
+	printf("\033[38;5;214m[TEST FT_BZERO]\033[0m\n");
 	printf("char buffer[6] = 'abcde'\n");
     char buffer[6] = "abcde"; // Buffer inicializado con letras
 
@@ -75,10 +152,13 @@ void test_bzero(void)
     ft_ok(buffer[2] == '\0', "ft_bzero buffer[2] == '\\0'");
     ft_ok(buffer[3] == 'd', "ft_bzero buffer[3] == 'd'");
     ft_ok(buffer[4] == 'e', "ft_bzero buffer[4] == 'e'");
+
+	printf("\n");
 }
 
 void test_memmove(void)
 {
+	printf("\033[38;5;214m[TEST FT_MEMMOVE]\033[0m\n");
 	printf("char src1[6] = '12345'\n");
 	printf("char dst1[6] = 'aaaaa'\n");
 	char src1[6] = "12345";
@@ -110,11 +190,13 @@ void test_memmove(void)
 	ft_ok(buffer2[2] == 'a', "ft_memmove solapado buffer2[2] == 'a'");
 	ft_ok(buffer2[3] == 'b', "ft_memmove solapado buffer2[3] == 'b'");
 	ft_ok(buffer2[6] == 'e', "ft_memmove solapado buffer2[6] == 'e'");
+	
 	printf("\n");
 }
 
 void test_strlcpy(void)
 {
+	printf("\033[38;5;214m[TEST FT_STRLCPY]\033[0m\n");
 	char src1[] = "Hola";
 	char dst1[10];
 
@@ -149,6 +231,7 @@ void test_strlcpy(void)
 
 void test_strlcat(void)
 {
+	printf("\033[38;5;214m[TEST FT_STRLCAT]\033[0m\n");
 	// Caso 1: espacio suficiente para concatenar todo
 	char buffer1[20] = "Hello, ";
 	size_t result1 = ft_strlcat(buffer1, "world!", 20);
@@ -179,6 +262,7 @@ void test_strlcat(void)
 
 void test_toupper(void)
 {
+	printf("\033[38;5;214m[TEST FT_TOUPPER]\033[0m\n");
 	// Letras minúsculas → deben convertirse
 	ft_ok(ft_toupper('a') == 'A', "ft_toupper('a') == 'A'");
 	ft_ok(ft_toupper('m') == 'M', "ft_toupper('m') == 'M'");
@@ -199,6 +283,7 @@ void test_toupper(void)
 
 void test_tolower(void)
 {
+	printf("\033[38;5;214m[TEST FT_TOLOWER]\033[0m\n");
 	// Letras mayúsculas → deben convertirse
 	ft_ok(ft_tolower('A') == 'a', "ft_tolower('A') == 'a'");
 	ft_ok(ft_tolower('M') == 'm', "ft_tolower('M') == 'm'");
@@ -219,6 +304,7 @@ void test_tolower(void)
 
 void test_strchr(void)
 {
+	printf("\033[38;5;214m[TEST FT_STRCHR]\033[0m\n");
 	// Caso 1: carácter en medio
 	char *s1 = "42Urduliz";
 	char *res1 = ft_strchr(s1, 'r');
@@ -243,104 +329,119 @@ void test_strchr(void)
 	printf("\n");
 }
 
+void test_strrchr(void)
+{
+	printf("\033[38;5;214m[TEST FT_STRRCPY]\033[0m\n");
+	char *s1 = "banana";
+
+	// Última aparición de 'a'
+	char *res1 = ft_strrchr(s1, 'a');
+	ft_ok(res1 == &s1[5], "ft_strrchr(s1, 'a') apunta a s1[5]");
+
+	// Primera y última aparición son la misma
+	char *s2 = "chat";
+	char *res2 = ft_strrchr(s2, 'c');
+	ft_ok(res2 == s2, "ft_strrchr(s2, 'c') apunta al inicio");
+
+	// Carácter no existente
+	char *res3 = ft_strrchr(s1, 'x');
+	ft_ok(res3 == NULL, "ft_strrchr(s1, 'x') == NULL");
+
+	// Buscar '\0'
+	char *res4 = ft_strrchr(s1, '\0');
+	ft_ok(res4 == &s1[6], "ft_strrchr(s1, '\\0') apunta al final");
+
+	printf("\n");
+}
+
+void test_strncmp(void)
+{
+	printf("\033[38;5;214m[TEST FT_STRNCMP]\033[0m\n");
+
+	// Comparación igual hasta n
+	ft_ok(ft_strncmp("hola", "hola", 4) == 0, "strncmp iguales hasta n");
+
+	// Primera diferencia en mitad
+	ft_ok(ft_strncmp("hola", "holi", 4) < 0, "strncmp diferencia en última letra");
+
+
+	// Diferencia al principio
+	ft_ok(ft_strncmp("cola", "hola", 4) < 0, "strncmp diferencia al principio");
+
+	// Diferencia justo después del límite → debe devolver 0
+	ft_ok(ft_strncmp("abcdef", "abcxyz", 3) == 0, "strncmp iguales en los 3 primeros");
+
+	// Una cadena vacía
+	ft_ok(ft_strncmp("", "", 1) == 0, "strncmp dos vacías con n=1");
+	ft_ok(ft_strncmp("", "a", 1) < 0, "strncmp \"\" < \"a\" con n=1");
+	ft_ok(ft_strncmp("a", "", 1) > 0, "strncmp \"a\" > \"\" con n=1");
+
+	// n = 0 → debe devolver 0 siempre
+	ft_ok(ft_strncmp("abc", "xyz", 0) == 0, "strncmp con n=0 siempre == 0");
+
+	// Cadenas largas iguales, n corta
+	ft_ok(ft_strncmp("abcdefghijklmnop", "abcdefghijklmnop", 5) == 0, "strncmp largas, iguales hasta 5");
+
+	// Cadenas largas, primera diferencia fuera del límite
+	ft_ok(ft_strncmp("abcdef", "abcdez", 5) == 0, "strncmp diferencia fuera de límite");
+
+	// Diferencia con carácter negativo (signed/unsigned test)
+	ft_ok(ft_strncmp("\200", "\0", 1) > 0, "strncmp compara como unsigned char");
+
+	printf("\n");
+}
+
 
 int main(void)
 {
 	// Test ft_isalpha
-	printf("\033[38;5;214m[TEST FT_ISALPHA]\033[0m\n");
-	ft_ok(ft_isalpha('A') == 1, "ft_isalpha('A')");
-	ft_ok(ft_isalpha('z') == 1, "ft_isalpha('z')");
-	ft_ok(ft_isalpha('1') == 0, "ft_isalpha('1')");
-	ft_ok(ft_isalpha('*') == 0, "ft_isalpha('*')");
-	ft_ok(ft_isalpha('a') == 1, "ft_isalpha('a')");
-	ft_ok(ft_isalpha('Z') == 1, "ft_isalpha('Z')");
-	ft_ok(ft_isalpha('5') == 0, "ft_isalpha('5')");
-	ft_ok(ft_isalpha('^') == 0, "ft_isalpha('^')");
-	printf("\n");
+	test_isalpha();
 
 	// Test ft_isdigit
-	printf("\033[38;5;214m[TEST FT_ISDIGIT]\033[0m\n");
-	ft_ok(ft_isdigit('9') == 1, "ft_isdigit('9')");
-	ft_ok(ft_isdigit('5') == 1, "ft_isdigit('5')");
-	ft_ok(ft_isdigit('0') == 1, "ft_isdigit('1')");
-	ft_ok(ft_isdigit('a') == 0, "ft_isdigit('a')");
-	ft_ok(ft_isdigit('A') == 0, "ft_isdigit('A')");
-	ft_ok(ft_isdigit('Z') == 0, "ft_isdigit('Z')");
-	ft_ok(ft_isdigit('z') == 0, "ft_isdigit('z')");
-	ft_ok(ft_isdigit(';') == 0, "ft_isdigit(';')");
-	printf("\n");
+	test_isdigit();
 
 	// Test ft_isalnum
-	printf("\033[38;5;214m[TEST FT_ISALNUM]\033[0m\n");
-	ft_ok(ft_isalnum('9') == 1, "ft_isalnum('9')");
-	ft_ok(ft_isalnum('5') == 1, "ft_isalnum('5')");
-	ft_ok(ft_isalnum('0') == 1, "ft_isalnum('0')");
-	ft_ok(ft_isalnum('a') == 1, "ft_isalnum('a')");
-	ft_ok(ft_isalnum('-') == 0, "ft_isalnum('-')");
-	ft_ok(ft_isalnum('Z') == 1, "ft_isalnum('Z')");
-	ft_ok(ft_isalnum('z') == 1, "ft_isalnum('z')");
-	ft_ok(ft_isalnum(';') == 0, "ft_isalnum(';')");
-	printf("\n");
+	test_isalnum();
 
 	// Test ft_isascii
-	printf("\033[38;5;214m[TEST FT_ISASCII]\033[0m\n");
-	ft_ok(ft_isascii('A') == 1, "ft_isascii('A')");
-	ft_ok(ft_isascii(127) == 1, "ft_isascii(127)");
-	ft_ok(ft_isascii(0) == 1, "ft_isascii(0)");
-	ft_ok(ft_isascii(128) == 0, "ft_isascii(128)");
-	ft_ok(ft_isascii(-1) == 0, "ft_isascii(-1)");
-	printf("\n");
+	test_isascii();
 
 	// Test ft_isprint
-	printf("\033[38;5;214m[TEST FT_ISPRINT]\033[0m\n");
-	ft_ok(ft_isprint(' ') == 1, "ft_isprint(' ')");
-	ft_ok(ft_isprint('A') == 1, "ft_isprint('A')");
-	ft_ok(ft_isprint('~') == 1, "ft_isprint('~')");
-	ft_ok(ft_isprint(31) == 0, "ft_isprint(31)");
-	ft_ok(ft_isprint(127) == 0, "ft_isprint(127)");
-	printf("\n");
+	test_isprint();
 
 	// Test ft_strlen
-	printf("\033[38;5;214m[TEST FT_STRLEN]\033[0m\n");
-	ft_ok(ft_strlen("ChatGPT") == 7, "ft_strlen(\"ChatGPT\")");
-	ft_ok(ft_strlen("hola") == 4, "ft_strlen(\"hola\")");
-	ft_ok(ft_strlen("") == 0, "ft_strlen(\"\")");
-	ft_ok(ft_strlen("42Urduliz") == 9, "ft_strlen(\"42Urduliz\")");
-	printf("\n");
+	test_strlen();
 
 	// Test ft_memset
-	printf("\033[38;5;214m[TEST FT_MEMSET]\033[0m\n");
 	test_memset();
-	printf("\n");
 
 	// Test ft_bzero
-	printf("\033[38;5;214m[TEST FT_BZERO]\033[0m\n");
 	test_bzero();
-	printf("\n");
 
 	// Test ft_memmove
-	printf("\033[38;5;214m[TEST FT_MEMMOVE]\033[0m\n");
 	test_memmove();
 
 	// Test ft_strlcpy
-	printf("\033[38;5;214m[TEST FT_STRLCPY]\033[0m\n");
 	test_strlcpy();
 
 	// Test ft_strlcat
-	printf("\033[38;5;214m[TEST FT_STRLCAT]\033[0m\n");
 	test_strlcat();
 
 	// Test ft_toupper
-	printf("\033[38;5;214m[TEST FT_TOUPPER]\033[0m\n");
 	test_toupper();
 
 	// Test ft_tolower
-	printf("\033[38;5;214m[TEST FT_TOLOWER]\033[0m\n");
+
 	test_tolower();
 
 	// Test ft_strchr
-	printf("\033[38;5;214m[TEST FT_STRCHR]\033[0m\n");
 	test_strchr();
+	
+	//Test strrchr
+	test_strrchr();
+
+	//Test strncmp
+	test_strncmp();
 
 	return (0);
 }
