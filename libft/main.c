@@ -1,16 +1,20 @@
 #include <stdio.h>
 #include "libft.h"
 
-void ft_ok(int condition, const char *test_name)
-{
+int g_result = 1;
+
+
+void ft_ok(int condition, const char *test_name){
 	if (condition)
 		printf("\033[0;32m[OK]\033[0m %s\n", test_name);
 	else
-		printf("\033[0;31m[KO]\033[0m %s\n", test_name);
+		{
+			printf("\033[0;31m[KO]\033[0m %s\n", test_name);
+			g_result = 0;
+		}
 }
 
-void test_isalpha(void)
-{
+void test_isalpha(void){
 	printf("\033[38;5;214m[TEST FT_ISALPHA]\033[0m\n");
 	ft_ok(ft_isalpha('A') == 1, "ft_isalpha('A')");
 	ft_ok(ft_isalpha('z') == 1, "ft_isalpha('z')");
@@ -23,8 +27,7 @@ void test_isalpha(void)
 	printf("\n");
 }
 
-void test_isdigit(void)
-{
+void test_isdigit(void){
 	printf("\033[38;5;214m[TEST FT_ISDIGIT]\033[0m\n");
 	ft_ok(ft_isdigit('9') == 1, "ft_isdigit('9')");
 	ft_ok(ft_isdigit('5') == 1, "ft_isdigit('5')");
@@ -37,8 +40,7 @@ void test_isdigit(void)
 	printf("\n");
 }
 
-void test_isalnum(void)
-{
+void test_isalnum(void){
 	printf("\033[38;5;214m[TEST FT_ISALNUM]\033[0m\n");
 	ft_ok(ft_isalnum('9') == 1, "ft_isalnum('9')");
 	ft_ok(ft_isalnum('5') == 1, "ft_isalnum('5')");
@@ -51,8 +53,7 @@ void test_isalnum(void)
 	printf("\n");
 }
 
-void test_isascii(void)
-{
+void test_isascii(void){
 	printf("\033[38;5;214m[TEST FT_ISASCII]\033[0m\n");
 	ft_ok(ft_isascii('A') == 1, "ft_isascii('A')");
 	ft_ok(ft_isascii(127) == 1, "ft_isascii(127)");
@@ -62,8 +63,7 @@ void test_isascii(void)
 	printf("\n");
 }
 
-void test_isprint(void)
-{
+void test_isprint(void){
 	printf("\033[38;5;214m[TEST FT_ISPRINT]\033[0m\n");
 	ft_ok(ft_isprint(' ') == 1, "ft_isprint(' ')");
 	ft_ok(ft_isprint('A') == 1, "ft_isprint('A')");
@@ -73,8 +73,7 @@ void test_isprint(void)
 	printf("\n");
 }
 
-void test_strlen(void)
-{
+void test_strlen(void){
 	printf("\033[38;5;214m[TEST FT_STRLEN]\033[0m\n");
 	ft_ok(ft_strlen("ChatGPT") == 7, "ft_strlen(\"ChatGPT\")");
 	ft_ok(ft_strlen("hola") == 4, "ft_strlen(\"hola\")");
@@ -83,8 +82,7 @@ void test_strlen(void)
 	printf("\n");
 }
 
-void test_memset(void)
-{
+void test_memset(void){
 	printf("\033[38;5;214m[TEST FT_MEMSET]\033[0m\n");
     char buffer[6] = "aaaaa"; // Crea un buffer inicializado a "aaaaa"
 
@@ -137,8 +135,7 @@ void test_memset(void)
 	printf("\n");
 }
 
-void test_bzero(void)
-{
+void test_bzero(void){
 	printf("\033[38;5;214m[TEST FT_BZERO]\033[0m\n");
 	printf("char buffer[6] = 'abcde'\n");
     char buffer[6] = "abcde"; // Buffer inicializado con letras
@@ -156,8 +153,46 @@ void test_bzero(void)
 	printf("\n");
 }
 
-void test_memmove(void)
-{
+void test_memcpy(void){
+	printf("\033[38;5;214m[TEST FT_MEMCPY]\033[0m\n");
+
+	// Caso 1: copiar n bytes normales
+	char src1[] = "12345";
+	char dst1[6] = "aaaaa";
+	ft_memcpy(dst1, src1, 5);
+	ft_ok(dst1[0] == '1', "ft_memcpy dst1[0] == '1'");
+	ft_ok(dst1[1] == '2', "ft_memcpy dst1[1] == '2'");
+	ft_ok(dst1[4] == '5', "ft_memcpy dst1[4] == '5'");
+
+	// Caso 2: copiar 0 bytes (no debe tocar nada)
+	char src2[] = "abcde";
+	char dst2[] = "zzzzz";
+	ft_memcpy(dst2, src2, 0);
+	ft_ok(dst2[0] == 'z', "ft_memcpy len=0 no toca dst2[0]");
+
+	// Caso 3: src y dst apuntan a lo mismo
+	char buffer1[] = "abcd";
+	ft_memcpy(buffer1, buffer1, 4);
+	ft_ok(buffer1[0] == 'a', "ft_memcpy src==dst no rompe nada");
+
+	// Caso 4: copiar bytes con \0 en medio
+	char src3[] = {'a', '\0', 'c', 'd'};
+	char dst3[4] = {'x', 'x', 'x', 'x'};
+	ft_memcpy(dst3, src3, 4);
+	ft_ok(dst3[1] == '\0', "ft_memcpy copia '\\0'");
+	ft_ok(dst3[3] == 'd', "ft_memcpy dst3[3] == 'd'");
+
+	// Caso 5: copiar bytes extendidos (\200-\377)
+	unsigned char src4[] = {0, 128, 255};
+	unsigned char dst4[3] = {9, 9, 9};
+	ft_memcpy(dst4, src4, 3);
+	ft_ok(dst4[1] == 128, "ft_memcpy copia byte 128");
+	ft_ok(dst4[2] == 255, "ft_memcpy copia byte 255");
+
+	printf("\n");
+}
+
+void test_memmove(void){
 	printf("\033[38;5;214m[TEST FT_MEMMOVE]\033[0m\n");
 	printf("char src1[6] = '12345'\n");
 	printf("char dst1[6] = 'aaaaa'\n");
@@ -194,8 +229,7 @@ void test_memmove(void)
 	printf("\n");
 }
 
-void test_strlcpy(void)
-{
+void test_strlcpy(void){
 	printf("\033[38;5;214m[TEST FT_STRLCPY]\033[0m\n");
 	char src1[] = "Hola";
 	char dst1[10];
@@ -229,8 +263,7 @@ void test_strlcpy(void)
 	printf("\n");
 }
 
-void test_strlcat(void)
-{
+void test_strlcat(void){
 	printf("\033[38;5;214m[TEST FT_STRLCAT]\033[0m\n");
 	// Caso 1: espacio suficiente para concatenar todo
 	char buffer1[20] = "Hello, ";
@@ -260,8 +293,7 @@ void test_strlcat(void)
 	printf("\n");
 }
 
-void test_toupper(void)
-{
+void test_toupper(void){
 	printf("\033[38;5;214m[TEST FT_TOUPPER]\033[0m\n");
 	// Letras minúsculas → deben convertirse
 	ft_ok(ft_toupper('a') == 'A', "ft_toupper('a') == 'A'");
@@ -281,8 +313,7 @@ void test_toupper(void)
 	printf("\n");
 }
 
-void test_tolower(void)
-{
+void test_tolower(void){
 	printf("\033[38;5;214m[TEST FT_TOLOWER]\033[0m\n");
 	// Letras mayúsculas → deben convertirse
 	ft_ok(ft_tolower('A') == 'a', "ft_tolower('A') == 'a'");
@@ -302,8 +333,7 @@ void test_tolower(void)
 	printf("\n");
 }
 
-void test_strchr(void)
-{
+void test_strchr(void){
 	printf("\033[38;5;214m[TEST FT_STRCHR]\033[0m\n");
 	// Caso 1: carácter en medio
 	char *s1 = "42Urduliz";
@@ -329,8 +359,7 @@ void test_strchr(void)
 	printf("\n");
 }
 
-void test_strrchr(void)
-{
+void test_strrchr(void){
 	printf("\033[38;5;214m[TEST FT_STRRCPY]\033[0m\n");
 	char *s1 = "banana";
 
@@ -354,8 +383,7 @@ void test_strrchr(void)
 	printf("\n");
 }
 
-void test_strncmp(void)
-{
+void test_strncmp(void){
 	printf("\033[38;5;214m[TEST FT_STRNCMP]\033[0m\n");
 
 	// Comparación igual hasta n
@@ -391,6 +419,189 @@ void test_strncmp(void)
 	printf("\n");
 }
 
+void test_memchr(void){
+	printf("\033[38;5;214m[TEST FT_MEMCHR]\033[0m\n");
+
+	// Caso 1: carácter presente en medio
+	char data1[] = "42Urduliz";
+	void *res1 = ft_memchr(data1, 'r', 10);
+	ft_ok(res1 == &data1[3], "ft_memchr(data1, 'r', 10) → data1[3]");
+
+	// Caso 2: carácter al final
+	void *res2 = ft_memchr(data1, 'z', 10);
+	ft_ok(res2 == &data1[8], "ft_memchr(data1, 'z', 10) → data1[8]");
+
+	// Caso 3: carácter no está
+	void *res3 = ft_memchr(data1, 'X', 10);
+	ft_ok(res3 == NULL, "ft_memchr(data1, 'X', 10) == NULL");
+
+	// Caso 4: buscar '\0'
+	char data2[] = "abc\0def";
+	void *res4 = ft_memchr(data2, '\0', 7);
+	ft_ok(res4 == &data2[3], "ft_memchr(data2, '\\0', 7) → data2[3]");
+
+	// Caso 5: n = 0 → nunca encuentra nada
+	char data3[] = "abcdef";
+	void *res5 = ft_memchr(data3, 'a', 0);
+	ft_ok(res5 == NULL, "ft_memchr(data3, 'a', 0) == NULL");
+
+	// Caso 6: byte extendido (\200)
+	unsigned char data4[] = {0, 1, 127, 128, 255};
+	void *res6 = ft_memchr(data4, 255, 5);
+	ft_ok(res6 == &data4[4], "ft_memchr(data4, 255, 5) → data4[4]");
+
+	printf("\n");
+}
+
+void test_memcmp(void){
+	printf("\033[38;5;214m[TEST FT_MEMCMP]\033[0m\n");
+
+	// Caso 1: bloques idénticos
+	char a1[] = "abcde";
+	char a2[] = "abcde";
+	ft_ok(ft_memcmp(a1, a2, 5) == 0, "memcmp bloques iguales");
+
+	// Caso 2: primera diferencia al principio
+	char b1[] = "abc";
+	char b2[] = "xbc";
+	ft_ok(ft_memcmp(b1, b2, 3) < 0, "memcmp diferencia al inicio");
+
+	// Caso 3: primera diferencia en el medio
+	char c1[] = "aXc";
+	char c2[] = "aYc";
+	ft_ok(ft_memcmp(c1, c2, 3) < 0, "memcmp diferencia en medio");
+
+	// Caso 4: misma cadena, pero n = 0
+	ft_ok(ft_memcmp("abc", "xyz", 0) == 0, "memcmp con n = 0 → igual");
+
+	// Caso 5: comparación corta, no alcanza diferencias
+	ft_ok(ft_memcmp("abcdef", "abcXYZ", 3) == 0, "memcmp iguales en los primeros 3 bytes");
+
+	// Caso 6: diferencia en byte con valor >127 (signed vs unsigned)
+	unsigned char d1[] = {0x01, 0x7F, 0x80};
+	unsigned char d2[] = {0x01, 0x7F, 0x00};
+	ft_ok(ft_memcmp(d1, d2, 3) > 0, "memcmp bytes extendidos unsigned (0x80 > 0x00)");
+
+	// Caso 7: buffer con \0 en medio
+	char e1[] = {'a', '\0', 'c'};
+	char e2[] = {'a', '\0', 'd'};
+	ft_ok(ft_memcmp(e1, e2, 3) < 0, "memcmp no se detiene en '\\0'");
+
+	printf("\n");
+}
+
+void test_strnstr(void){
+	printf("\033[38;5;214m[TEST FT_STRNSTR]\033[0m\n");
+
+	// Caso 1: needle dentro de haystack
+	char *hay1 = "Esto es una cadena de prueba";
+	char *res1 = ft_strnstr(hay1, "cadena", 25);
+	ft_ok(res1 == &hay1[12], "ft_strnstr encuentra 'cadena' en haystack");
+
+	// Caso 2: needle justo al final, pero cabe
+	char *res2 = ft_strnstr("123456789", "789", 9);
+	ft_ok(res2 != NULL && res2[0] == '7', "ft_strnstr encuentra al final con len suficiente");
+
+	// Caso 3: needle no cabe dentro de len
+	char *res3 = ft_strnstr("123456789", "789", 8);
+	ft_ok(res3 == NULL, "ft_strnstr no encuentra si len es demasiado corto");
+
+	// Caso 4: needle vacío → debe devolver haystack
+	char *res4 = ft_strnstr("abc", "", 3);
+	ft_ok(ft_strncmp(res4, "abc", 3) == 0, "...");
+
+	// Caso 5: len = 0 → siempre NULL, excepto si needle vacío
+	char *res5 = ft_strnstr("abc", "a", 0);
+	ft_ok(res5 == NULL, "ft_strnstr len=0 y needle != '' devuelve NULL");
+
+	char *res6 = ft_strnstr("abc", "", 0);
+	ft_ok(ft_strncmp(res6, "abc", 3) == 0, "...");
+
+	// Caso 6: no aparece en haystack
+	char *res7 = ft_strnstr("abcdef", "xyz", 6);
+	ft_ok(res7 == NULL, "ft_strnstr con needle inexistente devuelve NULL");
+
+	printf("\n");
+}
+
+void test_atoi(void){
+	printf("\033[38;5;214m[TEST FT_ATOI]\033[0m\n");
+
+	// Casos normales
+	ft_ok(ft_atoi("0") == 0, "ft_atoi(\"0\") == 0");
+	ft_ok(ft_atoi("42") == 42, "ft_atoi(\"42\") == 42");
+	ft_ok(ft_atoi("-42") == -42, "ft_atoi(\"-42\") == -42");
+	ft_ok(ft_atoi("+123") == 123, "ft_atoi(\"+123\") == 123");
+
+	// Espacios iniciales
+	ft_ok(ft_atoi("   7") == 7, "ft_atoi(\"   7\") == 7");
+	ft_ok(ft_atoi("\t\n\r  -99") == -99, "ft_atoi(\"\\t\\n\\r  -99\") == -99");
+
+	// Texto después del número
+	ft_ok(ft_atoi("123abc") == 123, "ft_atoi(\"123abc\") == 123");
+
+	// Solo signo
+	ft_ok(ft_atoi("+") == 0, "ft_atoi(\"+\") == 0");
+	ft_ok(ft_atoi("-") == 0, "ft_atoi(\"-\") == 0");
+
+	// Cadena vacía
+	ft_ok(ft_atoi("") == 0, "ft_atoi(\"\") == 0");
+
+	// Límite de int
+	ft_ok(ft_atoi("2147483647") == 2147483647, "ft_atoi(\"2147483647\") == INT_MAX");
+	ft_ok(ft_atoi("-2147483648") == -2147483648, "ft_atoi(\"-2147483648\") == INT_MIN");
+
+	printf("\n");
+}
+
+void test_calloc(void){
+	printf("\033[38;5;214m[TEST FT_CALLOC]\033[0m\n");
+
+	// Caso normal
+	char *str = ft_calloc(5, sizeof(char));
+	ft_ok(str != NULL, "ft_calloc(5, sizeof(char)) != NULL");
+
+	// Todos los bytes deben estar a 0
+	int all_zero = 1;
+	for (int i = 0; i < 5; i++)
+		if (str[i] != 0)
+			all_zero = 0;
+	ft_ok(all_zero, "ft_calloc inicializa todo a cero");
+	free(str);
+
+	// count = 0
+	char *empty1 = ft_calloc(0, sizeof(char));
+	ft_ok(empty1 != NULL, "ft_calloc(0, size) devuelve puntero válido o NULL permitido");
+	free(empty1);
+
+	// size = 0
+	char *empty2 = ft_calloc(5, 0);
+	ft_ok(empty2 != NULL, "ft_calloc(count, 0) devuelve puntero válido o NULL permitido");
+	free(empty2);
+
+	printf("\n");
+}
+
+void test_strdup(void){
+	printf("\033[38;5;214m[TEST FT_STRDUP]\033[0m\n");
+
+	const char *src = "hola mundo";
+	char *copy = ft_strdup(src);
+
+	ft_ok(copy != NULL, "ft_strdup devuelve puntero válido");
+	ft_ok(ft_strncmp(copy, src, ft_strlen(src)) == 0, "ft_strdup copia correctamente");
+	ft_ok(copy != src, "ft_strdup devuelve un puntero distinto al original");
+	free(copy);
+
+	// Caso vacío
+	char *empty = ft_strdup("");
+	ft_ok(empty != NULL, "ft_strdup(\"\") != NULL");
+	ft_ok(empty[0] == '\0', "ft_strdup(\"\") devuelve cadena vacía");
+	free(empty);
+
+	printf("\n");
+}
+
 
 int main(void)
 {
@@ -418,6 +629,9 @@ int main(void)
 	// Test ft_bzero
 	test_bzero();
 
+	// Test ft_memcpy
+	test_memcpy();	
+
 	// Test ft_memmove
 	test_memmove();
 
@@ -442,6 +656,29 @@ int main(void)
 
 	//Test strncmp
 	test_strncmp();
+
+	//Test memchr
+	test_memchr();
+
+	//Test memcmp
+	test_memcmp();
+
+	//Test strnstr
+	test_strnstr();
+
+	//Test stoi
+	test_atoi();
+
+	//Test calloc
+	test_calloc();
+
+	//Test strdup
+	test_strdup();
+
+	if (g_result)
+	printf("\n\033[0;32m✅ TODOS LOS TESTS PASADOS\033[0m\n\n");
+	else
+	printf("\n\033[0;31m❌ ALGÚN TEST HA FALLADO\033[0m\n\n");
 
 	return (0);
 }
