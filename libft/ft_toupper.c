@@ -6,7 +6,15 @@
 /*   By: mdiestre <mdiestre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:59:02 by mdiestre          #+#    #+#             */
-/*   Updated: 2025/04/30 12:59:05 by mdiestre         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:27:48 by mdiestre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+int	ft_toupper(int c)
+{
+	if (c >= 'a' && c <= 'z')
+	{
+		return (c -32);
+	}
+	return (c);
+}
