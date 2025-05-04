@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include "libft.h"
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+
 
 int g_result = 1;
 
@@ -602,6 +608,435 @@ void test_strdup(void){
 	printf("\n");
 }
 
+void test_substr(void){
+	printf("\033[38;5;214m[TEST FT_SUBSTR]\033[0m\n");
+
+	// Caso 1: Extraer parte normal de cadena
+	char *s1 = "Hola mundo";
+	char *res1 = ft_substr(s1, 5, 5);
+	ft_ok(res1 && strcmp(res1, "mundo") == 0, "ft_substr extrae 'mundo'");
+
+	// Caso 2: start = 0, len más corto que s
+	char *res2 = ft_substr(s1, 0, 4);
+	ft_ok(res2 && strcmp(res2, "Hola") == 0, "ft_substr desde 0, 4 letras");
+
+	// Caso 3: start > strlen(s) → cadena vacía
+	char *res3 = ft_substr(s1, 50, 5);
+	ft_ok(res3 && strcmp(res3, "") == 0, "ft_substr con start > len devuelve \"\"");
+
+	// Caso 4: len mayor que lo que queda
+	char *res4 = ft_substr(s1, 6, 100);
+	ft_ok(res4 && strcmp(res4, "undo") == 0, "ft_substr len largo ajustado");
+
+	// Caso 5: len = 0 → cadena vacía
+	char *res5 = ft_substr(s1, 3, 0);
+	ft_ok(res5 && strcmp(res5, "") == 0, "ft_substr con len=0 devuelve \"\"");
+
+	// Caso 6: cadena vacía
+	char *res6 = ft_substr("", 0, 10);
+	ft_ok(res6 && strcmp(res6, "") == 0, "ft_substr desde cadena vacía");
+
+	// Caso 7: start + len = strlen → exacto hasta el final
+	char *res7 = ft_substr(s1, 5, 5);
+	ft_ok(res7 && strcmp(res7, "mundo") == 0, "ft_substr exacto hasta final");
+
+	// Caso 8: NULL como input
+	char *res8 = ft_substr(NULL, 0, 5);
+	ft_ok(res8 == NULL, "ft_substr(NULL, ...) devuelve NULL");
+
+	printf("\n");
+}
+
+void test_strjoin(void) {
+    printf("\033[38;5;214m[TEST FT_STRJOIN]\033[0m\n");
+
+    // Caso normal
+    char *res1 = ft_strjoin("Hola", " mundo");
+    ft_ok(res1 && strcmp(res1, "Hola mundo") == 0, "ft_strjoin(\"Hola\", \" mundo\") → \"Hola mundo\"");
+    free(res1);
+
+    // Uno vacío
+    char *res2 = ft_strjoin("", "Hola");
+    ft_ok(res2 && strcmp(res2, "Hola") == 0, "ft_strjoin(\"\", \"Hola\") → \"Hola\"");
+    free(res2);
+
+    char *res3 = ft_strjoin("Hola", "");
+    ft_ok(res3 && strcmp(res3, "Hola") == 0, "ft_strjoin(\"Hola\", \"\") → \"Hola\"");
+    free(res3);
+
+    // Ambos vacíos
+    char *res4 = ft_strjoin("", "");
+    ft_ok(res4 && strcmp(res4, "") == 0, "ft_strjoin(\"\", \"\") → \"\"");
+    free(res4);
+
+    // Texto largo
+    char *long1 = "Esto es un texto largo ";
+    char *long2 = "concatenado con otro texto largo.";
+    char *res5 = ft_strjoin(long1, long2);
+    ft_ok(res5 && strcmp(res5, "Esto es un texto largo concatenado con otro texto largo.") == 0,
+          "ft_strjoin texto largo correcto");
+    free(res5);
+
+    printf("\n");
+}
+
+void test_strtrim(void){
+    printf("\033[38;5;214m[TEST FT_STRTRIM]\033[0m\n");
+
+    // Caso 1: recorte estándar
+    char *res1 = ft_strtrim(" 42 Urduliz ", " ");
+    ft_ok(res1 && strcmp(res1, "42 Urduliz") == 0, "trim espacios alrededor");
+
+    // Caso 2: recorte múltiple caracteres
+    char *res2 = ft_strtrim("xy42xy", "xy");
+    ft_ok(res2 && strcmp(res2, "42") == 0, "trim 'x' y 'y'");
+
+    // Caso 3: recorte completo
+    char *res3 = ft_strtrim("abcabc", "abc");
+    ft_ok(res3 && strcmp(res3, "") == 0, "todo se recorta → resultado vacío");
+
+    // Caso 4: nada se recorta
+    char *res4 = ft_strtrim("manupc", "xyz");
+    ft_ok(res4 && strcmp(res4, "manupc") == 0, "nada se recorta");
+
+    // Caso 5: cadena vacía
+    char *res5 = ft_strtrim("", " ");
+    ft_ok(res5 && strcmp(res5, "") == 0, "input vacío devuelve vacío");
+
+    // Caso 6: set vacío
+    char *res6 = ft_strtrim("abc", "");
+    ft_ok(res6 && strcmp(res6, "abc") == 0, "set vacío no recorta nada");
+
+    // Caso 7: set contiene solo un carácter
+    char *res7 = ft_strtrim("...hello...", ".");
+    ft_ok(res7 && strcmp(res7, "hello") == 0, "trim de puntos");
+
+    // Caso 8: NULL inputs
+    ft_ok(ft_strtrim(NULL, "abc") == NULL, "NULL como s1 devuelve NULL");
+    ft_ok(ft_strtrim("abc", NULL) == NULL, "NULL como set devuelve NULL");
+
+    printf("\n");
+}
+
+void	free_split(char **arr){
+	size_t i = 0;
+	if (!arr) return;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+void	test_split(void){
+	printf("\033[38;5;214m[TEST FT_SPLIT]\033[0m\n");
+
+	char **res;
+
+	// Caso 1: Separación normal
+	res = ft_split("Hola mundo 42", ' ');
+	ft_ok(res && strcmp(res[0], "Hola") == 0, "ft_split → palabra 1");
+	ft_ok(res && strcmp(res[1], "mundo") == 0, "ft_split → palabra 2");
+	ft_ok(res && strcmp(res[2], "42") == 0, "ft_split → palabra 3");
+	ft_ok(res[3] == NULL, "ft_split → NULL final");
+	free_split(res);
+
+	// Caso 2: Delimitadores consecutivos
+	res = ft_split("42  Urduliz   School", ' ');
+	ft_ok(res && strcmp(res[0], "42") == 0, "ft_split con múltiples espacios → palabra 1");
+	ft_ok(res && strcmp(res[1], "Urduliz") == 0, "ft_split con múltiples espacios → palabra 2");
+	ft_ok(res && strcmp(res[2], "School") == 0, "ft_split con múltiples espacios → palabra 3");
+	ft_ok(res[3] == NULL, "ft_split con múltiples espacios → NULL final");
+	free_split(res);
+
+	// Caso 3: Solo delimitadores
+	res = ft_split("     ", ' ');
+	ft_ok(res && res[0] == NULL, "ft_split solo delimitadores → array vacío");
+	free_split(res);
+
+	// Caso 4: Cadena vacía
+	res = ft_split("", ' ');
+	ft_ok(res && res[0] == NULL, "ft_split cadena vacía → array vacío");
+	free_split(res);
+
+	// Caso 5: No hay delimitador
+	res = ft_split("unicapalabra", ' ');
+	ft_ok(res && strcmp(res[0], "unicapalabra") == 0, "ft_split sin delimitadores → palabra única");
+	ft_ok(res[1] == NULL, "ft_split sin delimitadores → NULL final");
+	free_split(res);
+
+	// Caso 6: Empieza y termina en delimitador
+	res = ft_split("  hola mundo  ", ' ');
+	ft_ok(res && strcmp(res[0], "hola") == 0, "ft_split inicio delimitadores → palabra 1");
+	ft_ok(res && strcmp(res[1], "mundo") == 0, "ft_split final delimitadores → palabra 2");
+	ft_ok(res[2] == NULL, "ft_split inicio/final delimitadores → NULL final");
+	free_split(res);
+
+	printf("\n");
+}
+
+void test_itoa(void){
+	printf("\033[38;5;214m[TEST FT_ITOA]\033[0m\n");
+
+	char *res;
+
+	// Casos básicos
+	res = ft_itoa(0);
+	ft_ok(res && strcmp(res, "0") == 0, "ft_itoa(0) == \"0\"");
+	free(res);
+
+	res = ft_itoa(42);
+	ft_ok(res && strcmp(res, "42") == 0, "ft_itoa(42) == \"42\"");
+	free(res);
+
+	res = ft_itoa(-42);
+	ft_ok(res && strcmp(res, "-42") == 0, "ft_itoa(-42) == \"-42\"");
+	free(res);
+
+	res = ft_itoa(123456789);
+	ft_ok(res && strcmp(res, "123456789") == 0, "ft_itoa(123456789)");
+	free(res);
+
+	// Casos con un dígito
+	res = ft_itoa(7);
+	ft_ok(res && strcmp(res, "7") == 0, "ft_itoa(7)");
+	free(res);
+
+	res = ft_itoa(-3);
+	ft_ok(res && strcmp(res, "-3") == 0, "ft_itoa(-3)");
+	free(res);
+
+	// Límite superior
+	res = ft_itoa(2147483647);
+	ft_ok(res && strcmp(res, "2147483647") == 0, "ft_itoa(INT_MAX)");
+	free(res);
+
+	// Límite inferior
+	res = ft_itoa(-2147483648);
+	ft_ok(res && strcmp(res, "-2147483648") == 0, "ft_itoa(INT_MIN)");
+	free(res);
+
+	printf("\n");
+}
+
+char	add_index(unsigned int i, char c){
+	return (c + i);
+}
+
+char	to_upper(unsigned int i, char c){
+	(void)i;
+	if (c >= 'a' && c <= 'z')
+		return (c - 32);
+	return (c);
+}
+
+void test_strmapi(void){
+	printf("\033[38;5;214m[TEST FT_STRMAPI]\033[0m\n");
+
+	char *res1 = ft_strmapi("abc", add_index);  // 'a'+0, 'b'+1, 'c'+2 → ace
+	ft_ok(res1 && strcmp(res1, "ace") == 0, "ft_strmapi(\"abc\", add_index) == \"ace\"");
+	free(res1);
+
+	char *res2 = ft_strmapi("hola", to_upper);  // → "HOLA"
+	ft_ok(res2 && strcmp(res2, "HOLA") == 0, "ft_strmapi(\"hola\", to_upper) == \"HOLA\"");
+	free(res2);
+
+	char *res3 = ft_strmapi("", add_index);  // cadena vacía
+	ft_ok(res3 && strcmp(res3, "") == 0, "ft_strmapi(\"\", add_index) == \"\"");
+	free(res3);
+
+	char *res4 = ft_strmapi("42", NULL);
+	ft_ok(res4 == NULL, "ft_strmapi with NULL function returns NULL");
+
+	printf("\n");
+}
+
+void test_striteri(void){
+	printf("\033[38;5;214m[TEST FT_STRITERI]\033[0m\n");
+
+	// Función auxiliar: convierte todo en mayúscula
+	void to_upper(unsigned int i, char *c)
+	{
+		(void)i;
+		if (*c >= 'a' && *c <= 'z')
+			*c = *c - 32;
+	}
+
+	char str1[] = "hello42";
+	ft_striteri(str1, to_upper);
+	ft_ok(strcmp(str1, "HELLO42") == 0, "ft_striteri convierte a mayúsculas");
+
+	// Función auxiliar: reemplaza cada carácter por su índice + '0'
+	void index_to_char(unsigned int i, char *c)
+	{
+		if (i < 10)
+			*c = '0' + i;
+	}
+
+	char str2[] = "abcdef";
+	ft_striteri(str2, index_to_char);
+	ft_ok(strcmp(str2, "012345") == 0, "ft_striteri convierte en índices");
+
+	// Caso límite: string vacío
+	char str3[] = "";
+	ft_striteri(str3, to_upper);
+	ft_ok(strcmp(str3, "") == 0, "ft_striteri con cadena vacía no cambia nada");
+
+	// Caso NULL
+	ft_striteri(NULL, to_upper); // No debe dar error
+	ft_striteri("test", NULL);   // No debe dar error
+	ft_ok(1, "ft_striteri ignora inputs NULL sin crash");
+
+	printf("\n");
+}
+
+void test_putchar_fd(void){
+	printf("\033[38;5;214m[TEST FT_PUTCHAR_FD]\033[0m\n");
+
+	int fd = open("test_putchar.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("open");
+		return;
+	}
+
+	ft_putchar_fd('X', fd);
+	ft_putchar_fd('\n', fd);
+	ft_putchar_fd('Y', fd);
+
+	close(fd);
+
+	// Ahora comprobamos si el contenido es correcto
+	char buffer[10] = {0};
+	fd = open("test_putchar.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		perror("open read");
+		return;
+	}
+
+	read(fd, buffer, 10);
+	close(fd);
+
+	ft_ok(buffer[0] == 'X', "ft_putchar_fd escribe 'X'");
+	ft_ok(buffer[1] == '\n', "ft_putchar_fd escribe salto de línea");
+	ft_ok(buffer[2] == 'Y', "ft_putchar_fd escribe 'Y'");
+	ft_ok(buffer[3] == '\0' || buffer[3] == 0, "ft_putchar_fd no escribe más");
+
+	// Borra el archivo después del test
+	remove("test_putchar.txt");
+
+	printf("\n");
+}
+
+void	test_putstr_fd(void)
+{
+	printf("\033[38;5;214m[TEST FT_PUTSTR_FD]\033[0m\n");
+
+	int fd = open("test_putstr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	ft_putstr_fd("Hola mundo", fd);
+	close(fd);
+
+	fd = open("test_putstr.txt", O_RDONLY);
+	char buffer[20];
+	ssize_t bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	buffer[bytes_read] = '\0';
+	ft_ok(strcmp(buffer, "Hola mundo") == 0, "ft_putstr_fd escribe 'Hola mundo'");
+	close(fd);
+	unlink("test_putstr.txt");
+
+	// Prueba con string vacío
+	fd = open("test_putstr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	ft_putstr_fd("", fd);
+	close(fd);
+
+	fd = open("test_putstr.txt", O_RDONLY);
+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	buffer[bytes_read] = '\0';
+	ft_ok(strcmp(buffer, "") == 0, "ft_putstr_fd escribe cadena vacía");
+	close(fd);
+	unlink("test_putstr.txt");
+
+	printf("\n");
+}
+
+void	test_putendl_fd(void)
+{
+	printf("\033[38;5;214m[TEST FT_PUTENDL_FD]\033[0m\n");
+
+	int fd = open("test_putendl.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	ft_putendl_fd("Hola mundo", fd);
+	close(fd);
+
+	fd = open("test_putendl.txt", O_RDONLY);
+	char buffer[20];
+	ssize_t bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	buffer[bytes_read] = '\0';
+	ft_ok(strcmp(buffer, "Hola mundo\n") == 0, "ft_putendl_fd escribe 'Hola mundo\\n'");
+	close(fd);
+	unlink("test_putendl.txt");
+
+	// Cadena vacía → solo salto de línea
+	fd = open("test_putendl.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	ft_putendl_fd("", fd);
+	close(fd);
+
+	fd = open("test_putendl.txt", O_RDONLY);
+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	buffer[bytes_read] = '\0';
+	ft_ok(strcmp(buffer, "\n") == 0, "ft_putendl_fd escribe solo salto de línea");
+	close(fd);
+	unlink("test_putendl.txt");
+
+	printf("\n");
+}
+
+void test_putnbr_fd(void)
+{
+	printf("\033[38;5;214m[TEST FT_PUTNBR_FD]\033[0m\n");
+
+	int fd = open("putnbr_output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("Error al abrir archivo");
+		return;
+	}
+
+	ft_putnbr_fd(42, fd);
+	ft_putnbr_fd(-123, fd);
+	ft_putnbr_fd(0, fd);
+	ft_putnbr_fd(2147483647, fd);
+	ft_putnbr_fd(-2147483648, fd);
+
+	close(fd);
+
+	fd = open("putnbr_output.txt", O_RDONLY);
+	if (fd < 0)
+	{
+		perror("Error al reabrir archivo");
+		return;
+	}
+
+	char buffer[1024];
+	ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+	if (bytes >= 0)
+	{
+		buffer[bytes] = '\0';
+		ft_ok(strcmp(buffer, "42-12302147483647-2147483648") == 0, "ft_putnbr_fd escribe todos los valores correctamente");
+	}
+	else
+	{
+		perror("Error al leer archivo");
+	}
+
+	close(fd);
+	remove("putnbr_output.txt");
+
+	printf("\n");
+}
+
+
 
 int main(void)
 {
@@ -674,6 +1109,40 @@ int main(void)
 
 	//Test strdup
 	test_strdup();
+
+	//Test substr
+	test_substr();
+
+	//Test strjoin
+	test_strjoin();
+
+	//Test strtrim
+	test_strtrim();
+
+	//Test split
+	test_split();
+
+	//Test itoa
+	test_itoa();
+
+	//Test strmapi
+	test_strmapi();
+
+	//Test striteri
+	test_striteri();
+
+	//Test putchar_fd
+	test_putchar_fd();
+
+	//Test putstr_fd
+	test_putstr_fd();
+	
+	//Test putendl_fd
+	test_putendl_fd();
+
+	//Test putnbr_fd
+	test_putnbr_fd();
+
 
 	if (g_result)
 	printf("\n\033[0;32m✅ TODOS LOS TESTS PASADOS\033[0m\n\n");

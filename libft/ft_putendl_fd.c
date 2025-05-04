@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: manupc <manupc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 12:58:37 by mdiestre          #+#    #+#             */
-/*   Updated: 2025/05/03 09:54:40 by manupc           ###   ########.fr       */
+/*   Created: 2025/05/04 12:50:35 by manupc            #+#    #+#             */
+/*   Updated: 2025/05/04 20:52:17 by manupc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
-char	*ft_strdup(const char *s1)
+void	ft_putendl_fd(char *s, int fd)
 {
-    char	*str;
-    size_t  s_len;
-    
-    s_len = ft_strlen(s1);
-    str = malloc(s_len + 1);
-    if (!str)
-        return (NULL);
-    ft_memcpy(str, s1, s_len + 1);
-    return (str);
+	if (s)
+	{
+		while (*s)
+			write(fd, s++, 1);
+		write(fd, "\n", 1);
+	}
 }
