@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manupc <manupc@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mdiestre <mdiestre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 12:49:19 by manupc            #+#    #+#             */
-/*   Updated: 2025/05/04 20:48:24 by manupc           ###   ########.fr       */
+/*   Created: 2025/05/05 10:40:26 by mdiestre          #+#    #+#             */
+/*   Updated: 2025/05/05 10:40:29 by mdiestre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_putstr_fd(char *s, int fd)
 {
 	if (!s)
-		return;
+		return ;
 	while (*s)
 		write(fd, s++, 1);
 }
